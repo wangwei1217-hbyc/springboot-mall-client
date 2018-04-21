@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wangwei.mall.mapper.ProductMapper">
+
+    <resultMap id="baseResultMap" type="com.wangwei.mall.pojo.Product" autoMapping="true">
+    </resultMap>
+
+    <sql id="baseColumns">
+        id,pname,price,num,type,createDate
+    </sql>
+
+    <update id="saveOrUpdate" parameterType="com.wangwei.mall.pojo.Product" keyColumn="id"
+        keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO product(<include refid="baseColumns"/>)
+        VALUES (#{id},#{pname},#{price},#{num},#{type},now())
+        ON DUPLICATE KEY UPDATE
+        pname=#{pname},price=#{price},num=#{num},type=#{type}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM product BY id=#{id}
+    </delete>
+
+    <select id="getById" resultMap="baseResultMap">
+        SELECT <include refid="baseColumns"/> FROM product WHERE id=#{id}
+    </select>
+
+    <select id="getAll" resultMap="baseResultMap">
+        SELECT <include refid="baseColumns"/> FROM product
+    </select>
+
+
+</mapper>
